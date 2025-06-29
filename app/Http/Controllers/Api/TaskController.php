@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;
 
@@ -25,7 +26,7 @@ class TaskController extends Controller
         $ShowTaskById = Task::where('id', $id)->get();
 
         return response()->json([
-            "the Massge" => "Send Tasks By ID Successfully",
+            "the Massge" => "Show the Tasks By ID Successfully",
             "Status Codes" => 200,
             "the DATA" => $ShowTaskById,
         ]);
@@ -33,26 +34,50 @@ class TaskController extends Controller
 
     function store(Request $request)
     {
-        $StoreTask = Task::create([
-            'title' => $request->title,
-            'descriotion' => $request->descriotion,
-            'priority' => $request->priority,
-        ]);
+        $valadationsStore = $request->validate(
+            [
+                'title' => 'required|string|min:1|unique:tasks,title',
+                'descriotion' => 'required|string|min:1|unique:tasks,descriotion',
+                'priority'  => 'required|integer',
+            ],
+            // [
+            //     // 'title' =>  "The title field is required.  ",
+            //     'descriotion' =>  "The descriotion field is required.  ",
+            //     'priority'  =>  "The priority field is required.  ",
+            // ]
+        );
+
+        if (!$valadationsStore) {
+            return response()->json([
+                "the Massge" => "Not Fond Task",
+                "Status Codes" => 404,
+                "the DATA" => [],
+            ]);
+        }
+        $StoreTask = Task::create($valadationsStore);
 
         return response()->json([
             "the Massge" => "Created Task Successfully",
             "Status Codes" => 201,
             "the DATA" => $StoreTask,
-        ]);
+        ], 201);
     }
 
 
-    function update(Request $request, $id)
+    function update(UpdateRequest $request, $id)
     {
+
+        //  $valadationsupdate = $request->validated() ;
+        $task = $request->validated();
+
         $task = Task::findOrFail($id);
         // $task = Task::find($id);
         $task->update($request->all());
-        return response()->json($task);
+        return response()->json([
+            "the Massge" => "Updated Task Successfully",
+            "Status Codes" => 201,
+            "the DATA" => $task,
+        ], 201);
     }
 
 

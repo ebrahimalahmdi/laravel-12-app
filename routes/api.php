@@ -63,3 +63,6 @@ Route::delete('tasks/{id}', [TaskController::class, 'destroy']);
 
 
 // git commit -m "CRUD_In_the_Tasks_module"
+// php artisan make:request UpdateRequest
+
+// git commit -m "Add valadations for task module"
