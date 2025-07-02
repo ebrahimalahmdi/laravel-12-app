@@ -8,11 +8,20 @@ use Illuminate\Support\Facades\Route;
 
 
 // // =====//// =====//// =====//// =====//// =====//
-Route::get('/tasks', [TaskController::class, 'index']);
-Route::get('/tasks/{id}', [TaskController::class, 'show']);
-Route::post('/tasks', [TaskController::class, 'store']);
-Route::put('tasks/{id}', [TaskController::class, 'update']);
-Route::delete('tasks/{id}', [TaskController::class, 'destroy']);
+// Route::controller(function () {
+Route::controller(TaskController::class)->group(function () {
+    Route::get('/tasks', 'index');
+    Route::get('/tasks/{id}', 'show');
+    Route::post('/tasks', 'store');
+    Route::put('tasks/{id}', 'update');
+    Route::delete('tasks/{id}', 'destroy');
+});
+// });
+// Route::get('/tasks', [TaskController::class, 'index']);
+// Route::get('/tasks/{id}', [TaskController::class, 'show']);
+// Route::post('/tasks', [TaskController::class, 'store']);
+// Route::put('tasks/{id}', [TaskController::class, 'update']);
+// Route::delete('tasks/{id}', [TaskController::class, 'destroy']);
 // // =====//// =====//// =====//// =====//// =====//
 
 
@@ -20,10 +29,17 @@ Route::delete('tasks/{id}', [TaskController::class, 'destroy']);
 
 
 // // =====//// =====//// =====//// =====//// =====//
-Route::get('/profile', [ProfileController::class, 'index']);
-Route::post('/profile', [ProfileController::class, 'store']);
-Route::get('/profile/{id}', [ProfileController::class, 'show']);
-Route::put('profile/{id}', [ProfileController::class, 'update']);
+Route::controller(ProfileController::class)->group(function () {
+
+    Route::get('/profile', 'index');
+    Route::post('/profile', 'store');
+    Route::get('/profile/{id}', 'show');
+    Route::put('profile/{id}', 'update');
+});
+// Route::get('/profile', [ProfileController::class, 'index']);
+// Route::post('/profile', [ProfileController::class, 'store']);
+// Route::get('/profile/{id}', [ProfileController::class, 'show']);
+// Route::put('profile/{id}', [ProfileController::class, 'update']);
 // // =====//// =====//// =====//// =====//// =====//
 
 
@@ -31,11 +47,20 @@ Route::put('profile/{id}', [ProfileController::class, 'update']);
 
 
 // // =====//// =====//// =====//// =====//// =====//
-Route::get('user', [UserController::class, 'index']);
-Route::post('user', [UserController::class, 'store']);
-Route::get('user/{id}', [UserController::class, 'show']);
-Route::get('user/{id}/profile', [UserController::class, 'getprofile']);
-Route::get('user/{id}/tasks', [UserController::class, 'getAllTaskByUserId']);
+Route::controller(UserController::class)->group(function () {
+
+    Route::get('user', 'index');
+    Route::post('user', 'store');
+    Route::get('user/{id}', 'show');
+    Route::get('user/{id}/profile', 'getprofile');
+    Route::get('user/{id}/tasks', 'getAllTaskByUserId');
+});
+
+// Route::get('user', [UserController::class, 'index']);
+// Route::post('user', [UserController::class, 'store']);
+// Route::get('user/{id}', [UserController::class, 'show']);
+// Route::get('user/{id}/profile', [UserController::class, 'getprofile']);
+// Route::get('user/{id}/tasks', [UserController::class, 'getAllTaskByUserId']);
 // // =====//// =====//// =====//// =====//// =====//
 
 
@@ -47,11 +72,21 @@ Route::get('/tasks/{id}/user', [TaskController::class, 'GetUserInfoByTaskBelongT
 
 
 
+// php artisan make:model Category -mc
+// php artisan make:migration  create_category_task_table
 
 
 
+// // =====//// =====//// =====//// =====//// =====//
+Route::post('/tasks/{TaskId}/categories', [TaskController::class, 'AddCategoriesToTask']);
+// 
+// // I wnat get all the categories by the task id 
+// http://laravel-12-app.test/api/tasks/1/categories
+Route::get('/tasks/{TaskId}/categories', [TaskController::class, 'GetTaskCategories']);
 
-
+// // I wnat get  by the task id all the categories 
+// http://laravel-12-app.test/api/categories/1/tasks
+Route::get('/categories/{TaskId}/tasks', [TaskController::class, 'GetCategoriesTask']);
 
 
 

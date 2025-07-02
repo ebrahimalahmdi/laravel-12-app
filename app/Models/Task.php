@@ -18,4 +18,11 @@ class Task extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+
+    function categories()
+    {
+        // return $this->hasMany(Category::class);
+        return $this->belongsToMany(Category::class, 'category_task');
+    }
 }

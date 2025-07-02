@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskStoreRequest;
 use App\Http\Requests\UpdateRequest;
+use App\Models\Category;
 use App\Models\Task;
 use Illuminate\Http\Request;
 
@@ -101,6 +102,42 @@ class TaskController extends Controller
             "the Massge" => "Get User Info By Task BelongTo User",
             "Status Codes" => 200,
             "the DATA" => $GetUserInfoByTaskBelongToUser,
+        ], 200);
+    }
+
+    function AddCategoriesToTask(Request $request, $TaskId)
+    {
+        // return $id;
+        $GetTheTask = Task::findOrFail($TaskId);
+        $GetTheTask->categories()->attach($request->category_id);
+        return response()->json([
+            "the Massge" => "Created Attach Categories Successfully ",
+            "Status Codes" => 201,
+            "the DATA" => $GetTheTask,
+        ], 200);
+    }
+
+    function GetTaskCategories($TaskId)
+    {
+        // return $id;
+        $GetTheTask = Task::findOrFail($TaskId)->categories;
+        // $GetTheTask->categories()->attach($request->category_id);
+        return response()->json([
+            "the Massge" => "Get  Attach Categories Successfully ",
+            "Status Codes" => 200,
+            "the DATA" => $GetTheTask,
+        ], 200);
+    }
+
+    function GetCategoriesTask($TaskId)
+    {
+        // return $id;
+        $GetTheTask = Category::findOrFail($TaskId)->tasks;
+        // $GetTheTask->categories()->attach($request->category_id);
+        return response()->json([
+            "the Massge" => "Get  Attach tasks Successfully ",
+            "Status Codes" => 200,
+            "the DATA" => $GetTheTask,
         ], 200);
     }
 }
