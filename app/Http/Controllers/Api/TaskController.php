@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TaskStoreRequest;
 use App\Http\Requests\UpdateRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class TaskController extends Controller
         $tasks = Task::all();
 
         return response()->json([
-            "the Massge" => "Send All Tasks Successfully",
+            "the Massge" => "Get  All Tasks Successfully",
             "Status Codes" => 200,
             "the DATA" => $tasks,
         ]);
@@ -32,20 +33,10 @@ class TaskController extends Controller
         ]);
     }
 
-    function store(Request $request)
+    function store(TaskStoreRequest $request)
     {
-        $valadationsStore = $request->validate(
-            [
-                'title' => 'required|string|min:1|unique:tasks,title',
-                'descriotion' => 'required|string|min:1|unique:tasks,descriotion',
-                'priority'  => 'required|integer',
-            ],
-            // [
-            //     // 'title' =>  "The title field is required.  ",
-            //     'descriotion' =>  "The descriotion field is required.  ",
-            //     'priority'  =>  "The priority field is required.  ",
-            // ]
-        );
+        // $valadationsStore = $request->validate(
+        $valadationsStore = $request->validated();
 
         if (!$valadationsStore) {
             return response()->json([
@@ -100,9 +91,60 @@ class TaskController extends Controller
         ]);
     }
 
+    function GetUserInfoByTaskBelongToUser($id)
+    {
+        // // http://laravel-12-app.test/api/tasks/1/user
+        // $GetUserInfoByTaskBelongToUser = Task::find($id)->user;
+        // $GetUserInfoByTaskBelongToUser = Task::findOrFail($id)->user->email;
+        $GetUserInfoByTaskBelongToUser = Task::findOrFail($id)->user->only('id', 'name', 'email');
+        return response()->json([
+            "the Massge" => "Get User Info By Task BelongTo User",
+            "Status Codes" => 200,
+            "the DATA" => $GetUserInfoByTaskBelongToUser,
+        ], 200);
+    }
+}
+
+// // =====//// =====//// =====//// =====//// =====//
+
+
+// function store(Request $request)
+    // {
+    //     $valadationsStore = $request->validate(
+    //         [
+    //             'title' => 'required|string|min:1|unique:tasks,title',
+    //             'descriotion' => 'required|string|min:1|unique:tasks,descriotion',
+    //             'priority'  => 'required|integer',
+    //         ],
+    //         // [
+        //         //     // 'title' =>  "The title field is required.  ",
+        //         //     'descriotion' =>  "The descriotion field is required.  ",
+        //         //     'priority'  =>  "The priority field is required.  ",
+        //         // ]
+    //     );
+    
+    //     if (!$valadationsStore) {
+        //         return response()->json([
+            //             "the Massge" => "Not Fond Task",
+    //             "Status Codes" => 404,
+    //             "the DATA" => [],
+    //         ]);
+    //     }
+    //     $StoreTask = Task::create($valadationsStore);
+    
+    //     return response()->json([
+        //         "the Massge" => "Created Task Successfully",
+        //         "Status Codes" => 201,
+        //         "the DATA" => $StoreTask,
+        //     ], 201);
+        // }
 
 
 
+
+        // // =====//// =====//// =====//// =====//// =====//
+
+        
     // // / this is must edit all Fields 
     // function update(Request $request, $id)
     // {
@@ -124,9 +166,3 @@ class TaskController extends Controller
     //         return response()->json(['message' => 'task not found'], 404);
     //     }
     // }
-
-
-
-
-
-}

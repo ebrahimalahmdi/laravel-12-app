@@ -32,15 +32,25 @@ Route::put('profile/{id}', [ProfileController::class, 'update']);
 
 // // =====//// =====//// =====//// =====//// =====//
 Route::get('user', [UserController::class, 'index']);
+Route::post('user', [UserController::class, 'store']);
 Route::get('user/{id}', [UserController::class, 'show']);
 Route::get('user/{id}/profile', [UserController::class, 'getprofile']);
+Route::get('user/{id}/tasks', [UserController::class, 'getAllTaskByUserId']);
 // // =====//// =====//// =====//// =====//// =====//
 
 
+// // =====//// =====//// =====//// =====//// =====//
+// Route::get('user/{id}/tasks', [UserController::class, 'getTasksByIdUser']);
+// Route::get('user/{id}/tasks', [UserController::class, 'getAllTaskByUserId']);
+Route::get('/tasks/{id}/user', [TaskController::class, 'GetUserInfoByTaskBelongToUser']);
 
 
 
-// git amend -m "One-to-One_Relationship And One-to-Many_Relationship"
+
+
+
+
+
 
 
 

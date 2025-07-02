@@ -42,7 +42,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            // 'password' => 'hashed',
         ];
     }
 
@@ -51,5 +51,10 @@ class User extends Authenticatable
     function profile()
     {
         return $this->hasOne(profile::class);
+    }
+
+    function Tasks()
+    {
+        return $this->hasMany(Task::class);
     }
 }
