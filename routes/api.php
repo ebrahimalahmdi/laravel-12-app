@@ -16,12 +16,6 @@ Route::controller(TaskController::class)->group(function () {
     Route::put('tasks/{id}', 'update');
     Route::delete('tasks/{id}', 'destroy');
 });
-// });
-// Route::get('/tasks', [TaskController::class, 'index']);
-// Route::get('/tasks/{id}', [TaskController::class, 'show']);
-// Route::post('/tasks', [TaskController::class, 'store']);
-// Route::put('tasks/{id}', [TaskController::class, 'update']);
-// Route::delete('tasks/{id}', [TaskController::class, 'destroy']);
 // // =====//// =====//// =====//// =====//// =====//
 
 
@@ -36,10 +30,6 @@ Route::controller(ProfileController::class)->group(function () {
     Route::get('/profile/{id}', 'show');
     Route::put('profile/{id}', 'update');
 });
-// Route::get('/profile', [ProfileController::class, 'index']);
-// Route::post('/profile', [ProfileController::class, 'store']);
-// Route::get('/profile/{id}', [ProfileController::class, 'show']);
-// Route::put('profile/{id}', [ProfileController::class, 'update']);
 // // =====//// =====//// =====//// =====//// =====//
 
 
@@ -55,18 +45,10 @@ Route::controller(UserController::class)->group(function () {
     Route::get('user/{id}/profile', 'getprofile');
     Route::get('user/{id}/tasks', 'getAllTaskByUserId');
 });
-
-// Route::get('user', [UserController::class, 'index']);
-// Route::post('user', [UserController::class, 'store']);
-// Route::get('user/{id}', [UserController::class, 'show']);
-// Route::get('user/{id}/profile', [UserController::class, 'getprofile']);
-// Route::get('user/{id}/tasks', [UserController::class, 'getAllTaskByUserId']);
 // // =====//// =====//// =====//// =====//// =====//
 
 
 // // =====//// =====//// =====//// =====//// =====//
-// Route::get('user/{id}/tasks', [UserController::class, 'getTasksByIdUser']);
-// Route::get('user/{id}/tasks', [UserController::class, 'getAllTaskByUserId']);
 Route::get('/tasks/{id}/user', [TaskController::class, 'GetUserInfoByTaskBelongToUser']);
 
 
@@ -87,6 +69,7 @@ Route::get('/tasks/{TaskId}/categories', [TaskController::class, 'GetTaskCategor
 // // I wnat get  by the task id all the categories 
 // http://laravel-12-app.test/api/categories/1/tasks
 Route::get('/categories/{TaskId}/tasks', [TaskController::class, 'GetCategoriesTask']);
+// // =====//// =====//// =====//// =====//// =====//
 
 
 
@@ -94,7 +77,12 @@ Route::get('/categories/{TaskId}/tasks', [TaskController::class, 'GetCategoriesT
 
 
 
-
+// php artisan make:seeder CategorySeeder 
+// php artisan db:seed --class=CategorySeeder
+// php artisan db:seed 
+// php artisan mi:f
+// php artisan mi:f --seed
+// // =====//// =====//// =====//// =====//// =====//
 
 
 
