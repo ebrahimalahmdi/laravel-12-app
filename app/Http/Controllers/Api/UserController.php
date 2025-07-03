@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -102,4 +103,192 @@ class UserController extends Controller
         ], 200);
         // // http://laravel-12-app.test/api/user/1
     }
+
+    function register(Request $request)
+    {
+        $validtionsUser = $request->validate(
+            [
+                'name' => 'required|string|max:30',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|string|confirmed',
+            ]
+        );
+        if (!$validtionsUser) {
+            return response()->json([
+                "the Massge" => "Register Validation Errors",
+                "Status Codes" => 200,
+                "the DATA" => $validtionsUser,
+            ], 201);
+        }
+
+        $validtionsUser['password'] = Hash::make($request->password);
+        $StoreUser = User::create($validtionsUser);
+
+        // $ShowTheUser['token'] = $$StoreUser->createToken('AuthTpken')->plainTextToken;
+        // $ShowTheUser['name'] = $$StoreUser->name;
+        // $ShowTheUser['email'] = $$StoreUser->email;
+
+        return response()->json([
+            "the Massge" => "Registered User " . $StoreUser->name . " Registered  Successfully ",
+            "Status Codes" => 201,
+            "the DATA" => $StoreUser,
+            // "the Token" => $ShowTheUser,
+        ], 201);
+    }
+    function login(Request $request)
+    {
+        $validtionsUser = $request->validate(
+            [
+                'email' => 'required|email',
+                'password' => 'required|string',
+            ]
+        );
+        if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            return response()->json([
+                "the Massge" => "Invalid email or password !!!",
+                "Status Codes" => 400,
+                "the DATA" => $validtionsUser,
+            ], 401);
+        }
+        $StoreUser = User::where('email', $request->email)->firstOrFail();
+        $StoreTokenForUser = $StoreUser->createToken('Auth_Tpken')->plainTextToken;
+
+        return response()->json([
+            "the Massge" => "Login " . $StoreUser->name . "  Successfully ",
+            "Status Codes" => 201,
+            "the DATA" => $StoreUser,
+            "the Token" => $StoreTokenForUser,
+        ], 201);
+    }
+
+
+    function logout(Request $request)
+    {
+        $LogoutUserWithDeletedToken = $request->user()->currentAccessToken()->delete();
+        return response()->json([
+            "the Massge" => "Logout Successfully ",
+            "Status Codes" => 201,
+            "the DATA" => $LogoutUserWithDeletedToken,
+        ], 201);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // =====//// =====//// =====//// =====//// =====//
+
+
+// // this is code from this projects
+    // function login(Request $request)
+    // {
+    //     $validtionsUser = $request->validate(
+    //         [
+    //             'email' => 'required|email',
+    //             'password' => 'required|string',
+    //         ]
+    //     );
+    //     if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+    //         // if (!Auth::attempt($request->only('email', 'password'))) {
+    //         # code...
+    //         return response()->json([
+    //             "the Massge" => "Invalid email or password !!!",
+    //             "Status Codes" => 400,
+    //             "the DATA" => $validtionsUser,
+    //         ], 401);
+    //     }
+
+    //     // $StoreUser = User::where('email', $request->email)->first();
+    //     // $StoreUser = User::where('email', $request->email)->findOrFail();
+    //     $StoreUser = User::where('email', $request->email)->first();
+    //     $StoreTokenForUser = $StoreUser->createToken('Auth_Tpken')->plainTextToken;
+
+    //     return response()->json([
+    //         "the Massge" => "Login " . $StoreUser->name . "  Successfully ",
+    //         "Status Codes" => 200,
+    //         "the DATA" => $StoreUser,
+    //         "the Token" => $StoreTokenForUser,
+    //     ], 200);
+    // }
+
+
+
+// // =====//// =====//// =====//// =====//// =====//
+
+
+// // this is code from this API_COURCES projects
+
+    // public function register(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'name' => ['required', 'string', 'max:255'],
+    //         'email' => ['required', 'email', 'max:255', 'unique:' . User::class],
+    //         'password' => ['required', 'confirmed', Rules\Password::defaults()],
+    //     ], [], [
+    //         'name' => 'Name',
+    //         'email' => 'Email',
+    //         'password' => 'Password',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return ApiResponse::sendResponse(422, 'Register Validation Errors', $validator->messages()->all());
+    //     }
+
+    //     $user = User::create([
+    //         'name' => $request->name,
+    //         'email' => $request->email,
+    //         'password' => Hash::make($request->password),
+    //         //         $input['password'] = bcrypt($input['password']);
+    //     ]);
+    //     // $success['token'] =  $user->createToken('MyApp')->plainTextToken;
+    //     $data['token'] = $user->createToken('APIcourse')->plainTextToken;
+    //     $data['name'] = $user->name;
+    //     $data['email'] = $user->email;
+
+    //     return ApiResponse::sendResponse(201, 'User Account Created Successfully', $data);
+    // }
+
+// // =====//// =====//// =====//// =====//// =====//
+
+// // this is code from this API_COURCES projects
+
+    // public function login(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'email' => ['required', 'email', 'max:255'],
+    //         'password' => ['required'],
+    //     ], [], [
+    //         'email' => 'Email',
+    //         'password' => 'Password',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return ApiResponse::sendResponse(422, 'Login Validation Errors', $validator->errors());
+    //     }
+
+    //     if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+    //         $user = Auth::user();
+    //         $data['token'] = $user->createToken('MyAuthApp')->plainTextToken;
+    //         $data['name'] = $user->name;
+    //         $data['email'] = $user->email;
+    //         // return ApiResponse::sendResponse(200, 'User Logged In Successfully', $data);
+    //         return ApiResponse::sendResponse(200, 'User Login Successfully', $data);
+    //     } else {
+    //         return ApiResponse::sendResponse(401, 'These credentials doesn\'t exist', null);
+    //     }
+    // }
+
+
+
+    // // =====//// =====//// =====//// =====//// =====//

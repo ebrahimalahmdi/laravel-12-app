@@ -44,6 +44,10 @@ Route::controller(UserController::class)->group(function () {
     Route::get('user/{id}', 'show');
     Route::get('user/{id}/profile', 'getprofile');
     Route::get('user/{id}/tasks', 'getAllTaskByUserId');
+    // // =====//// =====//// =====//// =====//// =====//
+    Route::post('/register', 'register');
+    Route::post('/login', 'login');
+    Route::post('/logout', 'logout')->middleware('auth:sanctum');;
 });
 // // =====//// =====//// =====//// =====//// =====//
 
@@ -72,6 +76,22 @@ Route::get('/categories/{TaskId}/tasks', [TaskController::class, 'GetCategoriesT
 // // =====//// =====//// =====//// =====//// =====//
 
 
+// // =====//// =====//// =====//// =====//// =====//
+
+// Route::controller(UserController::class)->group(function () {
+
+//     Route::post('/register', 'register');
+//     Route::post('/login', 'login');
+//     Route::post('/logout', 'logout')->middleware('auth:sanctum');;
+// });
+
+
+
+
+
+// // =====//// =====//// =====//// =====//// =====//
+
+
 
 
 
@@ -90,10 +110,12 @@ Route::get('/categories/{TaskId}/tasks', [TaskController::class, 'GetCategoriesT
 
 
 
+// git commit --amend -m "Seeder_in_Laravel"
+// // =====//// =====//// =====//// =====//// =====//
 
 
 
-
+// git commit -m "Authentication_With_Sanctum_Register,Login,Logout"
 
 
 
