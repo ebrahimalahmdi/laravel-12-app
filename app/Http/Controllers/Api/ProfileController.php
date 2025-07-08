@@ -32,17 +32,9 @@ class ProfileController extends Controller
 
     function show($id)
     {
-
-        $User_id = Auth::user()->id;
-        $profileUpdate = profile::find($id);
-        if ($profileUpdate->user_id != $User_id) {
-            # code...
-            return response()->json([
-                "Massages" => "Unauthenticated !!!",
-                "Status Codes" => 200,
-                "the DATA" => [],
-            ], 200);
-        }
+        // ===// =====//// =====//// =====//// =====//// =====//
+        $Profile = $this->getOwnedprofileOrFail($id);
+        // ===// =====//// =====//// =====//// =====//// =====//
 
         // /// this is qourey without Rlationsship
         $ShowProfileById = profile::where('id', $id)->get();
@@ -66,28 +58,10 @@ class ProfileController extends Controller
         ], 201);
     }
 
-
-    // // =====//// =====//// =====//// =====//// =====//
-    // // =====//// =====//// =====//// =====//// =====//
-
     function update(ProfileUpdateRequest $request, $id)
     {
         // ===// =====//// =====//// =====//// =====//// =====//
-
-        // $profile = profile::find($id);
-        // $user_id = Auth::id();
-
-        // if (!$profile || $profile->user_id != $user_id) {
-        //     abort(response()->json([
-        //         "message" => "Unauthenticated !!!",
-        //         "status" => 200,
-        //         "data" => []
-        //     ], 200));
-        // }
-        // ===// =====//// =====//// =====//// =====//// =====//
-
-        // ===// =====//// =====//// =====//// =====//// =====//
-        $task = $this->getOwnedprofileOrFail($id);
+        $Profile = $this->getOwnedprofileOrFail($id);
         // ===// =====//// =====//// =====//// =====//// =====//
 
         $profileUpdate = $request->validated();
@@ -104,7 +78,10 @@ class ProfileController extends Controller
 
     function destroy($id)
     {
-        // $task = Task::findOrFail($id);
+        // ===// =====//// =====//// =====//// =====//// =====//
+        $Profile = $this->getOwnedprofileOrFail($id);
+        // ===// =====//// =====//// =====//// =====//// =====//
+
         $profile = profile::find($id);
         if (!$profile) {
             return response()->json([
@@ -126,6 +103,40 @@ class ProfileController extends Controller
 
 // // =====//// =====//// =====//// =====//// =====//
 // // =====//// =====//// =====//// =====//// =====//
+// git commit -m "Auth__user_____How_to_Access_the_Current_User After clean code "
+
+
+
+
+//  function update(ProfileUpdateRequest $request, $id)
+//     {
+//         // ===// =====//// =====//// =====//// =====//// =====//
+
+//         // $profile = profile::find($id);
+//         // $user_id = Auth::id();
+
+//         // if (!$profile || $profile->user_id != $user_id) {
+//         //     abort(response()->json([
+//         //         "message" => "Unauthenticated !!!",
+//         //         "status" => 200,
+//         //         "data" => []
+//         //     ], 200));
+//         // }
+//         // ===// =====//// =====//// =====//// =====//// =====//
+
+//         // ===// =====//// =====//// =====//// =====//// =====//
+//         $task = $this->getOwnedprofileOrFail($id);
+//         // ===// =====//// =====//// =====//// =====//// =====//
+
+//         $profileUpdate = $request->validated();
+//         $profileUpdate = profile::findOrFail($id);
+//         $profileUpdate->update($request->all());
+//         return response()->json([
+//             "the Massge" => "Updated Profiled Successfully",
+//             "Status Codes" => 201,
+//             "the DATA" => $profileUpdate,
+//         ], 201);
+//     }
 // // =====//// =====//// =====//// =====//// =====//
 
 
