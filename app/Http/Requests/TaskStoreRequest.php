@@ -28,7 +28,7 @@ class TaskStoreRequest extends FormRequest
             'title' => 'required|string|min:1',
             'descriotion' => 'required|string|min:1',
             'priority'  => 'required|integer',
-            'user_id'  => 'required|integer|exists:users,id',
+            // 'user_id'  => 'required|integer|exists:users,id',
         ];
     }
 }

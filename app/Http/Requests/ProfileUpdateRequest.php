@@ -23,7 +23,7 @@ class ProfileUpdateRequest extends FormRequest
     {
         return [
             //
-            'user_id' => 'required|integer|exists:users,id',
+            // 'user_id' => 'required|integer|exists:users,id',
             'phone' => 'string|max:15',
             'address' => 'nullable|string|max:100',
             'date_of_birth' => 'nullable|date',

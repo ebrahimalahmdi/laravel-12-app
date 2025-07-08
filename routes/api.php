@@ -7,53 +7,86 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
-// // =====//// =====//// =====//// =====//// =====//
-// Route::controller(function () {
-Route::controller(TaskController::class)->group(function () {
-    Route::get('/tasks', 'index');
-    Route::get('/tasks/{id}', 'show');
-    Route::post('/tasks', 'store');
-    Route::put('tasks/{id}', 'update');
-    Route::delete('tasks/{id}', 'destroy');
-});
-// // =====//// =====//// =====//// =====//// =====//
-
-
-
-
-
-// // =====//// =====//// =====//// =====//// =====//
-Route::controller(ProfileController::class)->group(function () {
-
-    Route::get('/profile', 'index');
-    Route::post('/profile', 'store');
-    Route::get('/profile/{id}', 'show');
-    Route::put('profile/{id}', 'update');
-});
-// // =====//// =====//// =====//// =====//// =====//
-
-
-
 
 
 // // =====//// =====//// =====//// =====//// =====//
 Route::controller(UserController::class)->group(function () {
-
     Route::get('user', 'index');
-    Route::post('user', 'store');
+    // // =====//// =====//// =====//// =====//// =====//
+    Route::post('user/register', 'register');
+    Route::post('user/login', 'login');
+    Route::post('user/logout', 'logout')->middleware('auth:sanctum');;
+    // // =====//// =====//// =====//// =====//// =====//
     Route::get('user/{id}', 'show');
+    // not used
     Route::get('user/{id}/profile', 'getprofile');
     Route::get('user/{id}/tasks', 'getAllTaskByUserId');
-    // // =====//// =====//// =====//// =====//// =====//
-    Route::post('/register', 'register');
-    Route::post('/login', 'login');
-    Route::post('/logout', 'logout')->middleware('auth:sanctum');;
+    // Route::post('user', 'store');
 });
 // // =====//// =====//// =====//// =====//// =====//
 
 
+
+
+
 // // =====//// =====//// =====//// =====//// =====//
-Route::get('/tasks/{id}/user', [TaskController::class, 'GetUserInfoByTaskBelongToUser']);
+Route::controller(TaskController::class)->group(function () {
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::prefix('/tasks')->group(function () {
+            Route::get('/', 'index');
+            Route::get('/{id}', 'show');
+            Route::post('', 'store');
+            Route::put('/{id}', 'update');
+            Route::delete('/{id}', 'destroy');
+            // // =====//// =====//// =====//// =====//// =====//
+            Route::get('/{id}/user', 'GetUserInfoByTaskBelongToUser');
+            Route::post('/{TaskId}/categories', 'AddCategoriesToTask'); // this is Post method 
+            Route::get('/{TaskId}/categories', 'GetTaskCategories'); // this is Get method 
+            // Route::get('/categories/{TaskId}/tasks', 'GetCategoriesTask');
+            Route::get('/categories/{TaskId}/tasks', 'GetTasksByCategory');
+        });
+    });
+});
+// // =====//// =====//// =====//// =====//// =====//
+
+
+
+// php artisan make:trait TaskOwnershipTrait
+
+// // =====//// =====//// =====//// =====//// =====//
+Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('/profile')->group(function () {
+        Route::controller(ProfileController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::post('/', 'store');
+            Route::get('/{id}', 'show');
+            Route::put('{id}', 'update');
+            Route::delete('{id}', 'destroy');
+        });
+    });
+});
+// // =====//// =====//// =====//// =====//// =====//
+
+
+
+// // // =====//// =====//// =====//// =====//// =====//
+// Route::controller(ProfileController::class)->group(function () {
+//     Route::get('/profile', 'index');
+//     Route::post('/profile', 'store');
+//     Route::get('/profile/{id}', 'show');
+//     Route::put('profile/{id}', 'update');
+//     Route::delete('profile/{id}', 'destroy');
+// });
+// // // =====//// =====//// =====//// =====//// =====//
+
+
+
+
+
+
+
+// // =====//// =====//// =====//// =====//// =====//
+// Route::get('/tasks/{id}/user', [TaskController::class, 'GetUserInfoByTaskBelongToUser']);
 
 
 
@@ -64,15 +97,15 @@ Route::get('/tasks/{id}/user', [TaskController::class, 'GetUserInfoByTaskBelongT
 
 
 // // =====//// =====//// =====//// =====//// =====//
-Route::post('/tasks/{TaskId}/categories', [TaskController::class, 'AddCategoriesToTask']);
+// Route::post('/tasks/{TaskId}/categories', [TaskController::class, 'AddCategoriesToTask']);
 // 
 // // I wnat get all the categories by the task id 
 // http://laravel-12-app.test/api/tasks/1/categories
-Route::get('/tasks/{TaskId}/categories', [TaskController::class, 'GetTaskCategories']);
+// Route::get('/tasks/{TaskId}/categories', [TaskController::class, 'GetTaskCategories']);
 
 // // I wnat get  by the task id all the categories 
 // http://laravel-12-app.test/api/categories/1/tasks
-Route::get('/categories/{TaskId}/tasks', [TaskController::class, 'GetCategoriesTask']);
+// Route::get('/categories/{TaskId}/tasks', [TaskController::class, 'GetCategoriesTask']);
 // // =====//// =====//// =====//// =====//// =====//
 
 
@@ -117,6 +150,44 @@ Route::get('/categories/{TaskId}/tasks', [TaskController::class, 'GetCategoriesT
 
 // git commit -m "Authentication_With_Sanctum_Register,Login,Logout"
 
+
+
+
+// // =====//// =====//// =====//// =====//// =====//
+// Laravel_#25_-_Auth__user_____How_to_Access_the_Current_User(0)
+
+
+
+// // // =====//// =====//// =====//// =====//// =====//
+// Route::controller(TaskController::class)->group(function () {
+//     // Route::middleware('auth.sanctum')
+//     Route::prefix('/tasks')->group(function () {
+
+//         Route::get('/', 'index');
+//         Route::get('/{id}', 'show');
+//         Route::post('', 'store')->middleware('auth:sanctum');;
+//         Route::put('/{id}', 'update');
+//         Route::delete('/{id}', 'destroy');
+//         // // =====//// =====//// =====//// =====//// =====//
+//         Route::get('/{id}/user', 'GetUserInfoByTaskBelongToUser');
+//         Route::post('/{TaskId}/categories', 'AddCategoriesToTask');
+//         Route::get('/{TaskId}/categories', 'GetTaskCategories');
+
+
+//         // Route::get('/tasks', 'index');
+//         // Route::get('/tasks/{id}', 'show');
+//         // Route::post('/tasks', 'store')->middleware('auth:sanctum');;
+//         // Route::put('tasks/{id}', 'update');
+//         // Route::delete('tasks/{id}', 'destroy');
+//         // // // =====//// =====//// =====//// =====//// =====//
+//         // Route::get('/tasks/{id}/user', 'GetUserInfoByTaskBelongToUser');
+//         // Route::post('/tasks/{TaskId}/categories', 'AddCategoriesToTask');
+//         // Route::get('/tasks/{TaskId}/categories', 'GetTaskCategories');
+//         // Route::get('/categories/{TaskId}/tasks', 'GetCategoriesTask');
+//     });
+//     Route::get('/categories/{TaskId}/tasks', 'GetCategoriesTask');
+// });
+// // // =====//// =====//// =====//// =====//// =====//
 
 
 

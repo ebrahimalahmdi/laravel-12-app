@@ -23,8 +23,9 @@ class UpdateRequest extends FormRequest
     {
         return [
             //
-            'title' => 'required|string|min:1|unique:tasks,title',
-            'descriotion' => 'nullable|string|min:1|unique:tasks,descriotion',
+            'title' => 'required|string|min:1',
+            // 'descriotion' => 'nullable|string|min:1|unique:tasks,descriotion',
+            'descriotion' => 'nullable|string|min:1',
             'priority'  => 'required|integer',
 
         ];
