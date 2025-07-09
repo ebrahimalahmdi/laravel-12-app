@@ -50,7 +50,10 @@ class ProfileController extends Controller
     function store(ProfileStoreRequest $request)
     {
 
-        $profileStore = profile::create($request->validated());
+        $GetUser_id = Auth::user()->id;
+        $profileStore = $request->validated();
+        $profileStore['user_id'] = $GetUser_id;
+        $profileStore = profile::create($profileStore);
         return response()->json([
             "the Massge" => "Created profile Successfully",
             "Status Codes" => 201,

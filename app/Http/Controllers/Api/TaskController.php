@@ -61,6 +61,19 @@ class TaskController extends Controller
             "the DATA" => $tasks,
         ]);
     }
+    function getalltasks()
+    {
+        $tasks = Task::all();
+        // $tasks = Auth::user()->tasks;
+
+        return $tasks;
+
+        return response()->json([
+            "the Massge" => "Get  All Tasks Successfully",
+            "Status Codes" => 200,
+            "the DATA" => $tasks,
+        ]);
+    }
 
     function show($id)
     {

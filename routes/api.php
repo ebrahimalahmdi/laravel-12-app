@@ -26,13 +26,17 @@ Route::controller(UserController::class)->group(function () {
 // // =====//// =====//// =====//// =====//// =====//
 
 
-
+// php artisan make:middleware CheckUseraRole
 
 
 // // =====//// =====//// =====//// =====//// =====//
 Route::controller(TaskController::class)->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::prefix('/tasks')->group(function () {
+
+            // // =====//// =====//// =====//// =====//// =====//
+            Route::get('/getalltasks', 'getalltasks')->middleware('CheckUser');
+            // // =====//// =====//// =====//// =====//// =====//
             Route::get('/', 'index');
             Route::get('/{id}', 'show');
             Route::post('', 'store');
@@ -44,12 +48,14 @@ Route::controller(TaskController::class)->group(function () {
             Route::get('/{TaskId}/categories', 'GetTaskCategories'); // this is Get method 
             // Route::get('/categories/{TaskId}/tasks', 'GetCategoriesTask');
             Route::get('/categories/{TaskId}/tasks', 'GetTasksByCategory');
+            // // =====//// =====//// =====//// =====//// =====//
         });
     });
 });
 // // =====//// =====//// =====//// =====//// =====//
 
 
+// 
 
 // php artisan make:trait TaskOwnershipTrait
 
