@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tasks', function (Blueprint $table) {
+        Schema::create('favorites', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->string('title');
-            $table->string('descriotion');
-            $table->enum('priority', ['high', 'medium', 'low']);
-            // $table->integer('priority');
+            $table->foreignId('task_id')->constrained('tasks')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tasks');
+        Schema::dropIfExists('favorites');
     }
 };

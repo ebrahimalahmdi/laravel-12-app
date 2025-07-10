@@ -61,6 +61,8 @@ class TaskController extends Controller
             "the DATA" => $tasks,
         ]);
     }
+
+
     function getalltasks()
     {
         $tasks = Task::all();
@@ -74,6 +76,49 @@ class TaskController extends Controller
             "the DATA" => $tasks,
         ]);
     }
+
+    function GetTasksByPriorty()
+    {
+        // $tasks = Auth::user()->Tasks()->orderByRaw("FIELD(priority,'high','medium','low')")->get();
+        // $tasks = Auth::user()->Tasks()->orderByRaw("FIELD(priority,'low','high','medium')")->get();
+        $tasks = Auth::user()->Tasks()->orderByRaw("FIELD(priority,'high','medium','low')")->get();
+        return response()->json([
+            "the Massge" => "Get  All Tasks Successfully",
+            "Status Codes" => 200,
+            "the DATA" => $tasks,
+        ]);
+    }
+
+
+    function addToFavorite($taskId)
+    {
+        $tasks = Task::findOrFail($taskId);
+        Auth::user()->favoriteTask()->syncWithoutDetaching($taskId);
+        return response()->json([
+            "the Massge" => "Taak Added To Favorite Successfully",
+            "Status Codes" => 200,
+        ]);
+    }
+    function removeFromFavorite($taskId)
+    {
+        $tasks = Task::findOrFail($taskId);
+        Auth::user()->favoriteTask()->detach($taskId);
+        return response()->json([
+            "the Massge" => "Taak removed from Favorite Successfully",
+            "Status Codes" => 200,
+        ]);
+    }
+    function getFavoriteTasks()
+    {
+        $tasks = Auth::user()->favoriteTask()->get();
+        return response()->json([
+            "the Massge" => "Get All Taak from Favorite Successfully",
+            "Status Codes" => 200,
+            "The Data" => $tasks,
+        ]);
+    }
+
+
 
     function show($id)
     {

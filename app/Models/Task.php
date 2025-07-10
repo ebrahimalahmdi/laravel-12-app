@@ -25,4 +25,10 @@ class Task extends Model
         // return $this->hasMany(Category::class);
         return $this->belongsToMany(Category::class, 'category_task');
     }
+
+
+    function favoriteByUser()
+    {
+        return $this->belongsToMany(User::class, 'favorites');
+    }
 }

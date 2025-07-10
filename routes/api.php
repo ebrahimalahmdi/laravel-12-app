@@ -28,6 +28,8 @@ Route::controller(UserController::class)->group(function () {
 
 // php artisan make:middleware CheckUseraRole
 
+// php artisan make:migration create_favorites_table
+
 
 // // =====//// =====//// =====//// =====//// =====//
 Route::controller(TaskController::class)->group(function () {
@@ -35,7 +37,14 @@ Route::controller(TaskController::class)->group(function () {
         Route::prefix('/tasks')->group(function () {
 
             // // =====//// =====//// =====//// =====//// =====//
+            Route::post('/{id}/favorite', 'addToFavorite');
+            Route::delete('/{id}/favorite', 'removeFromFavorite'); ////
+            Route::get('/favorite', 'getFavoriteTasks'); ////tasks/favorite
+            // // =====//// =====//// =====//// =====//// =====//
+
             Route::get('/getalltasks', 'getalltasks')->middleware('CheckUser');
+            // // =====//// =====//// =====//// =====//// =====//
+            Route::get('/ordered', 'GetTasksByPriorty');
             // // =====//// =====//// =====//// =====//// =====//
             Route::get('/', 'index');
             Route::get('/{id}', 'show');
@@ -49,13 +58,17 @@ Route::controller(TaskController::class)->group(function () {
             // Route::get('/categories/{TaskId}/tasks', 'GetCategoriesTask');
             Route::get('/categories/{TaskId}/tasks', 'GetTasksByCategory');
             // // =====//// =====//// =====//// =====//// =====//
+            Route::get('/categories/{TaskId}/tasks', 'GetTasksByCategory');
         });
     });
 });
 // // =====//// =====//// =====//// =====//// =====//
 
+//// this is commend for edit the columen witout deleted the data in  the tables
+// // php artisan migrate:rollback --step=1
 
-// 
+
+
 
 // php artisan make:trait TaskOwnershipTrait
 
