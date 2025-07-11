@@ -14,6 +14,7 @@ class profile extends Model
         'address',
         'date_of_birth',
         'bio',
+        'image',
     ];
 
     function users()

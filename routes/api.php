@@ -31,6 +31,7 @@ Route::controller(UserController::class)->group(function () {
 // php artisan make:migration create_favorites_table
 
 
+
 // // =====//// =====//// =====//// =====//// =====//
 Route::controller(TaskController::class)->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
