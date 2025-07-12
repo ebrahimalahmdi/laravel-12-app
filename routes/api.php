@@ -8,6 +8,15 @@ use Illuminate\Support\Facades\Route;
 
 
 //  php artisan make:resource ProfileResource
+
+//  php artisan make:factory UserFactory
+//  php artisan make:seeder Userseeder
+//  php artisan db:seed
+
+
+//  php artisan make:factory TaskFactory --model=Task
+//  php artisan make:seeder TaskSeeder
+// php artisan db:seed
 //  
 
 
