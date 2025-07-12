@@ -76,12 +76,12 @@ class ProfileController extends Controller
                 'message' => 'Image is required.'
             ], 422);
         }
+        // إنشاء الرابط العلني للصورة
+        $publicPath = 'storage/images/' . $fileName;
 
         // إنشاء سجل جديد في قاعدة البيانات
         $profile = Profile::create($validatedData);
 
-        // إنشاء الرابط العلني للصورة
-        $publicPath = 'storage/images/' . $fileName;
 
         return response()->json([
             'status' => "success",
@@ -91,6 +91,53 @@ class ProfileController extends Controller
         ]);
     }
     // ----------------------------------------
+
+
+    // // ----------------------------------------
+
+    // public function store(ProfileStoreRequest $request)
+    // {
+    //     // الحصول على معرف المستخدم الحالي
+    //     $userId = Auth::id();
+
+    //     // التحقق من صحة البيانات القادمة من الطلب
+    //     $validatedData = $request->validated();
+    //     $validatedData['user_id'] = $userId;
+
+    //     // التحقق من وجود صورة
+    //     if ($request->hasFile('image')) {
+    //         $image = $request->file('image');
+
+    //         // توليد اسم عشوائي للملف
+    //         $fileName = Str::random(20) . '.' . $image->getClientOriginalExtension();
+
+    //         // تخزين الصورة في storage/app/public/images
+    //         // (يجب أن يكون FILESYSTEM_DISK=public في .env)
+    //         $image->storeAs('images', $fileName, 'public');
+
+    //         // حفظ اسم الصورة في قاعدة البيانات
+    //         $validatedData['image'] = $fileName;
+    //     } else {
+    //         return response()->json([
+    //             'status' => 'error',
+    //             'message' => 'Image is required.'
+    //         ], 422);
+    //     }
+
+    //     // إنشاء سجل جديد في قاعدة البيانات
+    //     $profile = Profile::create($validatedData);
+
+    //     // إنشاء الرابط العلني للصورة
+    //     $publicPath = 'storage/images/' . $fileName;
+
+    //     return response()->json([
+    //         'status' => "success",
+    //         'message' => "Image Uploaded Successfully",
+    //         'path' => $publicPath,
+    //         'full_url' => asset($publicPath),
+    //     ]);
+    // }
+    // // ----------------------------------------
 
 
     function update(ProfileUpdateRequest $request, $id)

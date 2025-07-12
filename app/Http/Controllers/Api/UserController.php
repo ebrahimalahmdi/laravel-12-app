@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
+use App\Models\profile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,6 +12,54 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+
+    function GetUser()
+    {
+        $GetUserByAuth = Auth::user()->id;
+        $UserData = User::findOrFail($GetUserByAuth);
+        return response()->json([
+            'status' => "success",
+            'message' => "Get User Successfully!",
+            'Data ' => new UserResource($UserData),
+        ]);
+    }
+
+
+    private function allPosts($query)
+    {
+        return $query->latest()->paginate(3);
+    }
+
+    function GetUserWithProfile()
+    {
+        // $GetUserByAuth = Auth::user()->id;
+        // $UserData = User::with('profile')->findOrFail($GetUserByAuth);
+        // return response()->json([
+        //     'status' => "success",
+        //     'message' => "Get User Successfully!",
+        //     'Data ' => new UserResource($UserData),
+        // ]);
+
+        // // this is for collection
+
+        // $GetUserByAuth = Auth::user()->id;
+        // $UserData = User::with('profile')->findOrFail($GetUserByAuth);
+        // return response()->json([
+        //     'status' => "success",
+        //     'message' => "Get User Successfully!",
+        //     'Data ' => new UserResource($UserData),
+        // ]);
+
+        //   --------
+
+        // $GetUserByAuth = Auth::user()->id;
+        $UserData = User::with('profile')->get();
+        return response()->json([
+            'status' => "success",
+            'message' => "Get User Successfully!",
+            'Data ' =>  UserResource::collection($UserData),
+        ]);
+    }
 
 
     function index()
@@ -137,6 +187,89 @@ class UserController extends Controller
         ], 200);
         // // http://laravel-12-app.test/api/user/1
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // =================================================
+    // =================================================
+
+
+    // =================================================
+    // =================================================
+
+
+    // =================================================
+    // =================================================
+
+
+    // =================================================
+    // =================================================
+
+
+    // =================================================
+    // =================================================
+
+    // function GetUserWithProfile()
+    // {
+    //     $GetUserByAuth = Auth::user()->id;
+    //     $UserData = User::with('profile')->findOrFail($GetUserByAuth);
+    //     return response()->json([
+    //         'status' => "success",
+    //         'message' => "Get User Successfully!",
+    //         'Data ' => new UserResource($UserData),
+    //     ]);
+    // }
+
+    // =================================================
+    // =================================================
+
+
+    // function GetUser()
+    // {
+    //     $GetUserByAuth = Auth::user()->id;
+    //     // $UserData = User::with('profile')->findOrFail($GetUserByAuth);
+    //     $UserData = User::findOrFail($GetUserByAuth);
+    //     // return new UserResource($UserData);
+    //     return response()->json([
+    //         'massage' => $UserData,
+    //     ]);
+    // }
+
+
+    // function GetUser()
+    // {
+    //     // UserResource
+    //     $GetUserByAuth = Auth::user()->id;
+    //     // $UserData = User::findOrFail($GetUserByAuth)->first();
+    //     $UserData = User::with('profile')->findOrFail($GetUserByAuth);
+    //     return new UserResource($UserData);
+
+    //     // return response()->json($UserData, 200);
+
+
+    //     // if (!$user_id) {
+    //     //     # code...
+    //     //     return response()->json([
+    //     //         "the Massge" => "erorr",
+    //     //         "Status Codes" => 400,
+    //     //         // "the DATA" => $GetAllUsers,
+    //     //     ], 200);
+    //     // }
+    //     // return $UserData;
+    // }
+    // =================================================
+    // =================================================
+    // =================================================
 
 
     // function store(Request $request)

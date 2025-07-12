@@ -7,29 +7,39 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
+//  php artisan make:resource ProfileResource
+//  
 
 
 // // =====//// =====//// =====//// =====//// =====//
 Route::controller(UserController::class)->group(function () {
-    Route::get('user', 'index');
-    // // =====//// =====//// =====//// =====//// =====//
-    Route::post('user/register', 'register');
-    Route::post('user/login', 'login');
-    Route::post('user/logout', 'logout')->middleware('auth:sanctum');;
-    // // =====//// =====//// =====//// =====//// =====//
-    Route::get('user/{id}', 'show');
-    // not used
-    Route::get('user/{id}/profile', 'getprofile');
-    Route::get('user/{id}/tasks', 'getAllTaskByUserId');
-    // Route::post('user', 'store');
+
+    Route::prefix('/user')->group(function () {
+        Route::middleware('auth:sanctum')->group(function () {
+            // // =====//// =====//// =====//// =====//// =====//
+            Route::get('/', 'index');
+            Route::get('/getuser', 'GetUser'); ///http://laravel-12-app.test/api/user/getuser
+            Route::get('/getuserwithprofile', 'GetUserWithProfile'); ///http://laravel-12-app.test/api/user/getuserwithprofile/
+            // // =====//// =====//// =====//// =====//// =====//
+            Route::post('/logout', 'logout');
+            // // =====//// =====//// =====//// =====//// =====//
+            Route::get('/{id}', 'show');
+            // not used
+            Route::get('/{id}/profile', 'getprofile');
+            Route::get('/{id}/tasks', 'getAllTaskByUserId');
+        });
+        Route::post('/register', 'register');
+        Route::post('/login', 'login');
+        // Route::post('/logout', 'logout')->middleware('auth:sanctum');;
+    });
 });
 // // =====//// =====//// =====//// =====//// =====//
+
 
 
 // php artisan make:middleware CheckUseraRole
 
 // php artisan make:migration create_favorites_table
-
 
 
 // // =====//// =====//// =====//// =====//// =====//
@@ -86,6 +96,87 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 });
 // // =====//// =====//// =====//// =====//// =====//
+
+
+
+// // // =====//// =====//// =====//// =====//// =====//
+
+// // // =====//// =====//// =====//// =====//// =====//
+// // // =====//// =====//// =====//// =====//// =====//
+
+
+
+// // // =====//// =====//// =====//// =====//// =====//
+// // Route::get('/getuser', [UserController::class, 'GetUser']); ////http://laravel-12-app.test/api/getuser
+
+// Route::controller(UserController::class)->group(function () {
+//     Route::middleware('auth:sanctum')->group(function() {
+
+//     });
+//     Route::prefix('/user')->middleware('auth:sanctum')->group(function () {
+//         Route::get('/', 'index');
+//         Route::get('/getuser', 'GetUser'); ///http://laravel-12-app.test/api/user/getuser
+//         // Route::get('/GetUser', 'GetUser');
+//         // // =====//// =====//// =====//// =====//// =====//
+//         Route::post('/register', 'register');
+//         Route::post('/login', 'login');
+//         // Route::post('/logout', 'logout')->middleware('auth:sanctum');;
+//         Route::post('/logout', 'logout');
+//         // // =====//// =====//// =====//// =====//// =====//
+//         Route::get('/{id}', 'show');
+//         // not used
+//         Route::get('/{id}/profile', 'getprofile');
+//         Route::get('/{id}/tasks', 'getAllTaskByUserId');
+//     });
+// });
+// // // =====//// =====//// =====//// =====//// =====//
+
+
+
+
+// // // =====//// =====//// =====//// =====//// =====//
+
+
+// // // =====//// =====//// =====//// =====//// =====//
+// Route::get('/getuser', [UserController::class, 'GetUser']); ////http://laravel-12-app.test/api/getuser
+
+// Route::controller(UserController::class)->group(function () {
+//     Route::prefix('/user')->group(function () {
+//         Route::get('/', 'index');
+//         // Route::get('/GetUser', 'GetUser');
+//         // // =====//// =====//// =====//// =====//// =====//
+//         Route::post('/register', 'register');
+//         Route::post('/login', 'login');
+//         Route::post('/logout', 'logout')->middleware('auth:sanctum');;
+//         // // =====//// =====//// =====//// =====//// =====//
+//         Route::get('/{id}', 'show');
+//         // not used
+//         Route::get('/{id}/profile', 'getprofile');
+//         Route::get('/{id}/tasks', 'getAllTaskByUserId');
+//     });
+// });
+// // // =====//// =====//// =====//// =====//// =====//
+
+
+// // // =====//// =====//// =====//// =====//// =====//
+
+// // // =====//// =====//// =====//// =====//// =====//
+// Route::controller(UserController::class)->group(function () {
+//     Route::get('user', 'index');
+//     Route::get('user', 'index');
+//     // // =====//// =====//// =====//// =====//// =====//
+//     Route::post('user/register', 'register');
+//     Route::post('user/login', 'login');
+//     Route::post('user/logout', 'logout')->middleware('auth:sanctum');;
+//     // // =====//// =====//// =====//// =====//// =====//
+//     Route::get('user/{id}', 'show');
+//     // not used
+//     Route::get('user/{id}/profile', 'getprofile');
+//     Route::get('user/{id}/tasks', 'getAllTaskByUserId');
+//     // Route::post('user', 'store');
+// });
+// // // =====//// =====//// =====//// =====//// =====//
+
 
 
 

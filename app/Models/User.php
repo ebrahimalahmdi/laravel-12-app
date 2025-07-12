@@ -53,6 +53,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(profile::class);
     }
+    // function profile()
+    // {
+    //     return $this->hasMany(profile::class);
+    // }
 
     function Tasks()
     {
