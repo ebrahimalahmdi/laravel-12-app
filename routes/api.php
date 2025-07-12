@@ -80,7 +80,6 @@ Route::controller(TaskController::class)->group(function () {
 
 
 
-
 // php artisan make:trait TaskOwnershipTrait
 
 // // =====//// =====//// =====//// =====//// =====//

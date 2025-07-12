@@ -8,6 +8,8 @@ use App\Http\Requests\UpdateRequest;
 use App\Models\Category;
 use App\Models\Task;
 use App\Traits\TaskOwnershipTrait;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,38 +20,6 @@ class TaskController extends Controller
 
     // // =====//// =====//// =====//// =====//// =====//
     use TaskOwnershipTrait; // Assuming you have a trait for task ownership checks
-
-
-    // public function show($taskId)
-    // {
-    //     $task = $this->checkTaskOwnership($taskId);
-    //     if ($task instanceof \Illuminate\Http\JsonResponse) {
-    //         return $task; // رجعنا الرد في حال لم يكن صاحب التاسك
-    //     }
-
-    //     // إذا وصلنا هنا، المستخدم يملك التاسك
-    //     return response()->json([
-    //         'message' => 'Task found',
-    //         'status' => 200,
-    //         'data' => $task
-    //     ]);
-    // }
-
-    // public function update(Request $request, $taskId)
-    // {
-    //     $task = $this->checkTaskOwnership($taskId);
-    //     if ($task instanceof \Illuminate\Http\JsonResponse) {
-    //         return $task;
-    //     }
-
-    //     $task->update($request->all());
-
-    //     return response()->json([
-    //         'message' => 'Task updated',
-    //         'status' => 200,
-    //         'data' => $task
-    //     ]);
-    // }
 
     //
     function index()
@@ -181,30 +151,39 @@ class TaskController extends Controller
 
     function destroy($id)
     {
-        $User_id = Auth::user()->id;
-        $Task_id = Task::find($id);
-        if ($Task_id->user_id != $User_id) {
+        try {
+            //code...
+
+            $User_id = Auth::user()->id;
+            $Task_id = Task::find($id);
+            if ($Task_id->user_id != $User_id) {
+                return response()->json([
+                    "Massages" => "Unauthenticated !!!",
+                    "Status Codes" => 200,
+                    "the DATA" => null,
+                ], 200);
+            }
+            // $task = Task::findOrFail($id);
+            $task = Task::find($id);
+            $task->delete();
             return response()->json([
-                "Massages" => "Unauthenticated !!!",
-                "Status Codes" => 200,
-                "the DATA" => null,
-            ], 200);
-        }
-        // $task = Task::findOrFail($id);
-        $task = Task::find($id);
-        if (!$task) {
-            return response()->json([
-                "the Massge" => "Not Fond Task",
-                "Status Codes" => 404,
-                "the DATA" => [],
+                "the Massge" => "Deleted Task Successfully",
+                "Status Codes" => 204,
+                "the DATA" => $task,
             ]);
+        } catch (ModelNotFoundException $m) {
+            return response()->json([
+                "error" => "Task Not Found!! ",
+                "details" => $m->getMessage(),
+                "Status Codes" => 403,
+            ], 403);
+        } catch (Exception $m) {
+            return response()->json([
+                "error" => "something went wrong while deleteing the task ",
+                "details" => $m->getMessage(),
+                "Status Codes" => 403,
+            ], 403);
         }
-        $task->delete();
-        return response()->json([
-            "the Massge" => "Deleted Task Successfully",
-            "Status Codes" => 204,
-            "the DATA" => $task,
-        ]);
     }
 
     function GetUserInfoByTaskBelongToUser($id)
@@ -274,6 +253,75 @@ class TaskController extends Controller
     }
 
 
+
+    // =============================================
+    // =============================================
+    // =============================================
+
+    // function destroy($id)
+    // {
+    //     $User_id = Auth::user()->id;
+    //     $Task_id = Task::find($id);
+    //     if ($Task_id->user_id != $User_id) {
+    //         return response()->json([
+    //             "Massages" => "Unauthenticated !!!",
+    //             "Status Codes" => 200,
+    //             "the DATA" => null,
+    //         ], 200);
+    //     }
+    //     // $task = Task::findOrFail($id);
+    //     $task = Task::find($id);
+    //     if (!$task) {
+    //         return response()->json([
+    //             "the Massge" => "Not Fond Task",
+    //             "Status Codes" => 404,
+    //             "the DATA" => [],
+    //         ]);
+    //     }
+    //     $task->delete();
+    //     return response()->json([
+    //         "the Massge" => "Deleted Task Successfully",
+    //         "Status Codes" => 204,
+    //         "the DATA" => $task,
+    //     ]);
+    // }
+    // =============================================
+    // =============================================
+
+
+    // public function show($taskId)
+    // {
+    //     $task = $this->checkTaskOwnership($taskId);
+    //     if ($task instanceof \Illuminate\Http\JsonResponse) {
+    //         return $task; // رجعنا الرد في حال لم يكن صاحب التاسك
+    //     }
+
+    //     // إذا وصلنا هنا، المستخدم يملك التاسك
+    //     return response()->json([
+    //         'message' => 'Task found',
+    //         'status' => 200,
+    //         'data' => $task
+    //     ]);
+    // }
+
+    // public function update(Request $request, $taskId)
+    // {
+    //     $task = $this->checkTaskOwnership($taskId);
+    //     if ($task instanceof \Illuminate\Http\JsonResponse) {
+    //         return $task;
+    //     }
+
+    //     $task->update($request->all());
+
+    //     return response()->json([
+    //         'message' => 'Task updated',
+    //         'status' => 200,
+    //         'data' => $task
+    //     ]);
+    // }
+
+    // =============================================
+    // =============================================
     // // this is focuse after morning
 
     // function GetTasksByCategory($Categorid)

@@ -9,6 +9,8 @@ use App\Models\profile;
 use App\Models\User;
 use Illuminate\Support\Str;
 use App\Traits\profileOwnershipTrait;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel\Profiler\Profile as ProfilerProfile;
@@ -160,24 +162,42 @@ class ProfileController extends Controller
 
     function destroy($id)
     {
-        // ===// =====//// =====//// =====//// =====//// =====//
-        $Profile = $this->getOwnedprofileOrFail($id);
-        // ===// =====//// =====//// =====//// =====//// =====//
 
-        $profile = profile::find($id);
-        if (!$profile) {
+        try {
+            //code...
+            // ===// =====//// =====//// =====//// =====//// =====//
+            $Profile = $this->getOwnedprofileOrFail($id);
+            // ===// =====//// =====//// =====//// =====//// =====//
+
+            $profile = profile::find($id);
+            if (!$profile) {
+                return response()->json([
+                    "the Massge" => "Not Fond profile",
+                    "Status Codes" => 404,
+                    "the DATA" => [],
+                ]);
+            }
+            $profile->delete();
             return response()->json([
-                "the Massge" => "Not Fond profile",
-                "Status Codes" => 404,
-                "the DATA" => [],
+                "the Massge" => "Deleted profile Successfully",
+                "Status Codes" => 204,
+                "the DATA" => $profile,
             ]);
+        } catch (ModelNotFoundException $m) {
+            return response()->json([
+                "error" => "Task Not Found!! ",
+                "details" => $m->getMessage(),
+                "Status Codes" => 403,
+            ], 403);
+            //throw $th;
+        } catch (Exception $th) {
+            //throw $th;
+            return response()->json([
+                "error" => "something went wrong while deleteing the profile ",
+                "details" => $th->getMessage(),
+                "Status Codes" => 403,
+            ], 403);
         }
-        $profile->delete();
-        return response()->json([
-            "the Massge" => "Deleted profile Successfully",
-            "Status Codes" => 204,
-            "the DATA" => $profile,
-        ]);
     }
 }
 
