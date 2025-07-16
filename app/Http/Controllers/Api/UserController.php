@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Mail\WelcomeMail;
 use App\Models\profile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -75,13 +77,12 @@ class UserController extends Controller
 
     function register(Request $request)
     {
-        $validtionsUser = $request->validate(
-            [
-                'name' => 'required|string|max:30',
-                'email' => 'required|email|unique:users,email',
-                'password' => 'required|string|confirmed',
-            ]
-        );
+        $validtionsUser = $request->validate([
+            'name' => 'required|string|max:30',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|confirmed',
+        ]);
+
         if (!$validtionsUser) {
             return response()->json([
                 "the Massge" => "Register Validation Errors",
@@ -93,15 +94,16 @@ class UserController extends Controller
         $validtionsUser['password'] = Hash::make($request->password);
         $StoreUser = User::create($validtionsUser);
 
-        // $ShowTheUser['token'] = $$StoreUser->createToken('AuthTpken')->plainTextToken;
-        // $ShowTheUser['name'] = $$StoreUser->name;
-        // $ShowTheUser['email'] = $$StoreUser->email;
-
+        // =================
+        // = for send the Email to new users
+        // =================
+        // Mail::to($StoreUser->email)('examples@gmail.com');
+        // Mail::to($StoreUser->email)->send(new WelcomeMail());
+        Mail::to($StoreUser->email)->send(new WelcomeMail($StoreUser));
         return response()->json([
             "the Massge" => "Registered User " . $StoreUser->name . " Registered  Successfully ",
             "Status Codes" => 201,
             "the DATA" => $StoreUser,
-            // "the Token" => $ShowTheUser,
         ], 201);
     }
     function login(Request $request)
@@ -211,11 +213,50 @@ class UserController extends Controller
     // =================================================
     // =================================================
 
+    // =================================================
+    // =================================================
+
+    // =================================================
+    // =================================================
 
     // =================================================
     // =================================================
 
 
+    // =================================================
+    // =================================================
+
+    // function register(Request $request)
+    //     {
+    //         $validtionsUser = $request->validate(
+    //             [
+    //                 'name' => 'required|string|max:30',
+    //                 'email' => 'required|email|unique:users,email',
+    //                 'password' => 'required|string|confirmed',
+    //             ]
+    //         );
+    //         if (!$validtionsUser) {
+    //             return response()->json([
+    //                 "the Massge" => "Register Validation Errors",
+    //                 "Status Codes" => 200,
+    //                 "the DATA" => $validtionsUser,
+    //             ], 201);
+    //         }
+
+    //         $validtionsUser['password'] = Hash::make($request->password);
+    //         $StoreUser = User::create($validtionsUser);
+
+    //         // $ShowTheUser['token'] = $$StoreUser->createToken('AuthTpken')->plainTextToken;
+    //         // $ShowTheUser['name'] = $$StoreUser->name;
+    //         // $ShowTheUser['email'] = $$StoreUser->email;
+
+    //         return response()->json([
+    //             "the Massge" => "Registered User " . $StoreUser->name . " Registered  Successfully ",
+    //             "Status Codes" => 201,
+    //             "the DATA" => $StoreUser,
+    //             // "the Token" => $ShowTheUser,
+    //         ], 201);
+    //     }
     // =================================================
     // =================================================
 

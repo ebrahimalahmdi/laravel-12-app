@@ -19,7 +19,12 @@ use Illuminate\Support\Facades\Route;
 // php artisan db:seed
 //  
 
+// Send Email Using SMTP
+// SMTP ====> Simple Mail Transfer Prptocol
 
+//  php artisan make:mail WelcomeMail 
+
+// git commit -m "implement send message to use after register"
 // // =====//// =====//// =====//// =====//// =====//
 Route::controller(UserController::class)->group(function () {
 
@@ -415,6 +420,7 @@ Route::middleware('auth:sanctum')->group(function () {
 // php artisan make:request UpdateRequest
 
 // git commit -m "Add valadations for task module"
+
 
 // php artisan make:model profile -mc
 // php artisan m:fr
