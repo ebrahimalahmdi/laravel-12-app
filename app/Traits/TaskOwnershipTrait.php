@@ -12,10 +12,10 @@ trait TaskOwnershipTrait
     // ===// =====//// =====//// =====//// =====//// =====//
     public function getOwnedTaskOrFail($taskId)
     {
-        $profile = profile::find($id);
+        $Task = Task::find($taskId);
         $user_id = Auth::id();
 
-        if (!$profile || $profile->user_id != $user_id) {
+        if (!$Task || $Task->user_id != $user_id) {
             abort(response()->json([
                 "message" => "Unauthenticated !!!",
                 "status" => 200,
