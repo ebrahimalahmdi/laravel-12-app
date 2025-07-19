@@ -62,7 +62,6 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    // RrClO2OlanK2BNx5ZuJXE5h3Yq8WKj7ppyBteCw90d284bca
     // dd($request->all());
     public function update(UpdateTaskRequest $request, $id)
     {
@@ -103,5 +102,39 @@ class TaskController extends Controller
         } catch (Exception $m) {
             return apiResponse(404, 'something went wrong while deleteing the task!');
         }
+    }
+
+
+    /**
+     * Get tasks ordered by priority
+     */
+    function GetTasksByPriorty()
+    {
+        // $tasks = Auth::user()->Tasks()->orderByRaw("FIELD(priority,'high','medium','low')")->get();
+        $tasks = Auth::user()->tasks()
+            ->orderByRaw("FIELD(priority,'high','medium','low')")
+            ->get();
+        if (!$tasks) {
+            return apiResponse(404, 'Not Found Any Task!!');
+        }
+        return apiResponse(200, 'Tasks ordered by priority!', $tasks);
+    }
+
+    function getFavoriteTasks()
+    {
+        $tasks = Auth::user()->favoriteTask()->get();
+        return response()->json([
+            "the Massge" => "Get All Taak from Favorite Successfully",
+            "Status Codes" => 200,
+            "The Data" => $tasks,
+        ]);
+    }
+    /**
+     * Get all tasks (admin only)
+     */
+    function getalltasks()
+    {
+        $tasks = Task::all();
+        return apiResponse(200, 'Get all tasks (admin only)', $tasks);
     }
 }
