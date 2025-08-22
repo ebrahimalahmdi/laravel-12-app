@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Task;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,9 +16,30 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
+
+        // $this->call(Userseeder::class);
+        // $this->call(CategorySeeder::class);
+        // $this->call(Task::class);
+
+        // ---
+        // this is the same commend
+        // use all by array
+        // ---
+        // $this->call([
+        //     Userseeder::class,
+        //     CategorySeeder::class,
+        //     Taskseeder::class,
+        // ]);
+
+
+        $this->call([
+            Userseeder::class,
+            // CategorySeeder::class,
+            // Taskseeder::class,
         ]);
     }
 }
